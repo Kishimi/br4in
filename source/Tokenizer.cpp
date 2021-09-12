@@ -4,6 +4,8 @@
 #define DEBUG_PRINT_TOKENS 1
 #endif
 
+using namespace std::string_literals;
+
 namespace Br4in
 {
 
@@ -19,6 +21,7 @@ auto Tokenizer::operator()() -> std::vector<Token>
 	tokens.reserve(source.size());
 	current = source.begin();
 	hadError = false;
+	line = 1;
 
 	this->SkipComment();
 
@@ -55,59 +58,88 @@ auto Tokenizer::Eof() const -> bool
 	return current >= source.end();
 }
 
+auto Tokenizer::Current() const -> char
+{
+	return *current;
+}
+
+auto Tokenizer::Consume() -> char
+{
+	return *(current++);
+}
+
+auto Tokenizer::Error(const std::string &message) -> void
+{
+	hadError = true;
+
+	std::cout << "[Error on line " << line << "]: " << message << "\n";
+}
+
 auto Tokenizer::SkipComment() -> void
 {
 	this->SkipWhitespace();
 
-	if (*current == '[')
+	if (this->Current() == '[')
 	{
 		i32 scope = 1;
 
-		current++;
-		while (!this->Eof() && (*current != ']' || scope != 0))
+		this->Consume();
+		while (!this->Eof() && (this->Current() != ']' || scope != 0))
 		{
-			current++;
+			const auto prev = this->Consume();
+			if (prev == '\n')
+			{
+				line++;
+			}
 
-			if (*current == '[')
+			if (this->Current() == '[')
 			{
 				scope++;
 			}
-			else if (*current == ']')
+			else if (this->Current() == ']')
 			{
 				scope--;
 			}
 		}
 
 		// skip ']'
-		current++;
+		this->Consume();
 
 		if (this->Eof())
 		{
-			hadError = true;
-			std::cout << "[Error]: Unterminated comment, expected ']' found EOF\n";
+			this->Error("Unterminated comment, expected ']' but found EOF");
 		}
 	}
 }
 
 auto Tokenizer::SkipWhitespace() -> void
 {
-	while (!this->Eof() && IsWhitespace(*current))
+	while (!this->Eof() && IsWhitespace(this->Current()))
 	{
-		current++;
+		const char prev = this->Consume();
+		if (prev == '\n')
+		{
+			line++;
+		}
 	}
 }
 
 auto Tokenizer::SkipNonBrainfuck() -> void
 {
-	while (!this->Eof() && !IsBrainfuck(*current))
+	while (!this->Eof() && !IsBrainfuck(this->Current()))
 	{
-		current++;
+		const char prev = this->Consume();
+		if (prev == '\n')
+		{
+			line++;
+		}
 	}
 }
 
 auto Tokenizer::ReadToken() -> Token
 {
 	Token token;
+	token.line = line;
 
 	if (this->Eof())
 	{
@@ -116,7 +148,7 @@ auto Tokenizer::ReadToken() -> Token
 		return token;
 	}
 
-	const char c = *(current++);
+	const char c = this->Consume();
 
 	token.literal = c;
 	token.type = Token::None;
@@ -156,8 +188,7 @@ auto Tokenizer::ReadToken() -> Token
 			break;
 		
 		default:
-			std::cout << "[Error]: Unexpected character '" << c << "'\n";
-			hadError = true;
+			this->Error("Unexpected character '"s + c + "'"s);
 			break;
 	}
 

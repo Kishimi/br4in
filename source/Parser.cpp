@@ -39,7 +39,7 @@ auto Parser::Eof() const -> bool
 auto Parser::Error(const std::string &message) -> void
 {
 	hadError = true;
-	std::cout << "[Error]: " << message << "\n";
+	std::cout << "[Error on line" << current->line << "]: " << message << "\n";
 }
 
 auto Parser::Current() const -> Token::Type
@@ -105,7 +105,7 @@ auto Parser::ParseNext() -> ParseTreeNode*
 			return this->ParseLoop();
 
 		default:
-			this->Error("Unexpected token '"s + static_cast<char>((this->current - 1)->literal) + "' type "s + std::to_string(static_cast<i32>(current)));
+			this->Error("Unexpected token '"s + (this->current - 1)->literal + "'");
 			return nullptr;
 	}
 }

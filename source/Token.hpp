@@ -21,8 +21,9 @@ public:
 	};
 
 public:
-	Byte literal;
-	Type type;
+	char literal;
+	Type type = Type::None;
+	u64 line = 0;
 };
 
 }
