@@ -61,6 +61,11 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 	return InterpretResult::Success;
 }
 
+auto VirtualMachine::GetMemory() -> std::vector<sByte>
+{
+	return memory;
+}
+
 auto VirtualMachine::Run() -> InterpretResult
 {
 	if (!chunk)

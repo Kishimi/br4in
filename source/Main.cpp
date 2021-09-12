@@ -1,18 +1,16 @@
 #include <fstream>
 #include <iterator>
+#include <cstring>
 
-#include "Chunk.hpp"
 #include "VirtualMachine.hpp"
-#include "Tokenizer.hpp"
-#include "Parser.hpp"
-#include "Compiler.hpp"
+#include "Repl.hpp"
 
 auto main(i32 argc, const char **argv) -> int
 {
-	if (argc != 2)
+	if (argc == 1 || std::strcmp(argv[1], "-i") == 0)
 	{
-		std::cout << "Usage: br4in <brainfuck file>\n";
-		return 1;
+		Br4in::Repl();
+		return 0;
 	}
 
 	std::ifstream file(argv[1]);

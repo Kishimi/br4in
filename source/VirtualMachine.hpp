@@ -24,6 +24,8 @@ public:
 	auto Interpret(const std::string &code) -> InterpretResult;
 	auto Interpret(Chunk &chunk) -> InterpretResult;
 
+	auto GetMemory() -> std::vector<sByte>;
+
 private:
 	auto Run() -> InterpretResult;
 	
