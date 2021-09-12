@@ -37,7 +37,7 @@ auto Parser::Eof() const -> bool
 auto Parser::Error(const std::string &message) -> void
 {
 	hadError = true;
-	std::cerr << "[Error]: " << message << "\n";
+	std::cout << "[Error]: " << message << "\n";
 }
 
 auto Parser::Current() const -> Token::Type

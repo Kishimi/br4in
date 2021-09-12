@@ -97,7 +97,7 @@ auto Tokenizer::ReadToken() -> Token
 			break;
 		
 		default:
-			std::cerr << "[Error]: Unexpected character " << c << "\n";
+			std::cout << "[Error]: Unexpected character " << c << "\n";
 			hadError = true;
 			break;
 	}

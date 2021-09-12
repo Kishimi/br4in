@@ -97,7 +97,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::Increment:
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
-					std::cerr << "[RuntimeMemoryPointerCheck]: failed\n";
+					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 
@@ -107,7 +107,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::Decrement:
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
-					std::cerr << "[RuntimeMemoryPointerCheck]: failed\n";
+					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 
@@ -117,7 +117,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::Write:
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
-					std::cerr << "[RuntimeMemoryPointerCheck]: failed\n";
+					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 
@@ -132,7 +132,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::JumpNext:
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
-					std::cerr << "[RuntimeMemoryPointerCheck]: failed\n";
+					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 
@@ -159,7 +159,7 @@ auto VirtualMachine::Run() -> InterpretResult
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
 					std::cout << "Check: " << std::distance(memory.begin(), memoryPointer) << "=" << memory.size() << "\n";
-					std::cerr << "[RuntimeMemoryPointerCheck]: failed\n";
+					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 

@@ -4,27 +4,33 @@
 #include "Parser.hpp"
 #include "Compiler.hpp"
 
-auto main() -> int
+auto main(i32 argc, const char **argv) -> int
 {
+	if (argc != 2)
+	{
+		std::cout << "Usage: br4in <bf-code>\n";
+		return 1;
+	}
+
 	Br4in::VirtualMachine virtualMachine;
-	auto result = virtualMachine.Interpret("++++++++[>++++[>++>+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-.<.+++.------.--------.>>+.>++.");
+	auto result = virtualMachine.Interpret(argv[1]);
 
 	if (result != Br4in::InterpretResult::Success)
 	{
-		std::cerr << "[Error]: Virtual machine returned InterpretResult::";
+		std::cout << "[Error]: Virtual machine returned InterpretResult::";
 
 		switch (result)
 		{
 			case Br4in::InterpretResult::SyntaxError:
-				std::cerr << "SyntaxError\n";
+				std::cout << "SyntaxError\n";
 				break;
 
 			case Br4in::InterpretResult::ParseError:
-				std::cerr << "ParseError\n";
+				std::cout << "ParseError\n";
 				break;
 
 			case Br4in::InterpretResult::RuntimeError:
-				std::cerr << "RuntimeError\n";
+				std::cout << "RuntimeError\n";
 				break;
 		}
 	}
