@@ -1,3 +1,6 @@
+#include <fstream>
+#include <iterator>
+
 #include "Chunk.hpp"
 #include "VirtualMachine.hpp"
 #include "Tokenizer.hpp"
@@ -8,16 +11,19 @@ auto main(i32 argc, const char **argv) -> int
 {
 	if (argc != 2)
 	{
-		std::cout << "Usage: br4in <bf-code>\n";
+		std::cout << "Usage: br4in <brainfuck file>\n";
 		return 1;
 	}
 
+	std::ifstream file(argv[1]);
+	std::string code(std::istreambuf_iterator<char>(file), {});
+
 	Br4in::VirtualMachine virtualMachine;
-	auto result = virtualMachine.Interpret(argv[1]);
+	auto result = virtualMachine.Interpret(code);
 
 	if (result != Br4in::InterpretResult::Success)
 	{
-		std::cout << "[Error]: Virtual machine returned InterpretResult::";
+		std::cout << "[Virtual Machine]: InterpretResult=";
 
 		switch (result)
 		{

@@ -1,14 +1,16 @@
 #include "VirtualMachine.hpp"
 
-#define DEBUG_TRACE_EXECUTION 0
+#if defined DEBUG
+#define DEBUG_TRACE_EXECUTION 1
+#endif
 
 namespace Br4in
 {
 
 VirtualMachine::VirtualMachine()
 {
-	memory.reserve(BR4IN_VM_INITIAL_MEMORY_SIZE);
-	memoryPointer = memory.begin();
+	memoryPointer = 0;
+	memory.resize(1);
 }
 
 auto VirtualMachine::Interpret(Chunk &chunk) -> InterpretResult
@@ -68,10 +70,8 @@ auto VirtualMachine::Run() -> InterpretResult
 
 	auto RuntimeMemoryPointerCheck = [&](auto pointer) -> bool
 	{
-		return pointer >= memory.begin() && pointer < memory.end();
+		return pointer < memory.size();
 	};
-
-	memory.push_back(0);
 
 	for (auto instruction = chunk->begin(); instruction < chunk->end(); instruction++)
 	{
@@ -84,7 +84,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::MoveNext:
 				memoryPointer++;
 
-				if (memoryPointer == memory.end())
+				if (memoryPointer >= memory.size())
 				{
 					memory.push_back(0);
 				}
@@ -101,7 +101,7 @@ auto VirtualMachine::Run() -> InterpretResult
 					return InterpretResult::RuntimeError;
 				}
 
-				(*memoryPointer)++;
+				this->AtMemoryPointer()++;
 				break;
 
 			case OpCode::Decrement:
@@ -111,7 +111,7 @@ auto VirtualMachine::Run() -> InterpretResult
 					return InterpretResult::RuntimeError;
 				}
 
-				(*memoryPointer)--;
+				this->AtMemoryPointer()--;
 				break;
 
 			case OpCode::Write:
@@ -121,11 +121,16 @@ auto VirtualMachine::Run() -> InterpretResult
 					return InterpretResult::RuntimeError;
 				}
 
-				std::cout << *memoryPointer << std::flush;
+				#if not DEBUG_TRACE_EXECUTION
+				std::cout << this->AtMemoryPointer() << std::flush;
+				#else
+				std::cout << "Write: " << this->AtMemoryPointer() << "\n";
+				#endif
+
 				break;
 
 			case OpCode::Read:
-				std::cin >> *memoryPointer;
+				std::cin >> this->AtMemoryPointer();
 				std::cin.ignore();
 				break;
 
@@ -136,7 +141,7 @@ auto VirtualMachine::Run() -> InterpretResult
 					return InterpretResult::RuntimeError;
 				}
 
-				if (*memoryPointer == 0)
+				if (this->AtMemoryPointer() == 0)
 				{
 					u32 scope = 1;
 					while (*instruction != OpCode::JumpPrev || scope != 0)
@@ -158,12 +163,11 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::JumpPrev:
 				if (!RuntimeMemoryPointerCheck(memoryPointer))
 				{
-					std::cout << "Check: " << std::distance(memory.begin(), memoryPointer) << "=" << memory.size() << "\n";
 					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
 					return InterpretResult::RuntimeError;
 				}
 
-				if (*memoryPointer != 0)
+				if (this->AtMemoryPointer() != 0)
 				{
 					u32 scope = 1;
 					while (*instruction != OpCode::JumpNext || scope != 0)
@@ -185,9 +189,40 @@ auto VirtualMachine::Run() -> InterpretResult
 			default:
 				return InterpretResult::RuntimeError;
 		}
+
+		#if DEBUG_TRACE_EXECUTION
+		std::cout << "=== memory view ===";
+		u32 i = 0;
+		const u32 memoryWidth = 16;
+		for (auto byte : memory)
+		{
+			if (i % memoryWidth == 0)
+			{
+				std::cout << "\n";
+			}
+
+			// I want to avoid the memory output being broken by \n, \r, \t etc.
+			if (!IsWhitespace(byte) && byte != 0)
+			{
+				std::cout << byte;
+			}
+			else
+			{
+				std::cout << ".";
+			}
+
+			i++;
+		}
+		std::cout << "\n===================\n";
+		#endif
 	}
 
 	return InterpretResult::Success;
+}
+
+auto VirtualMachine::AtMemoryPointer() -> sByte&
+{
+	return memory[memoryPointer];
 }
 
 }

@@ -1,5 +1,7 @@
 #include "Parser.hpp"
 
+using namespace std::string_literals;
+
 namespace Br4in
 {
 
@@ -103,7 +105,7 @@ auto Parser::ParseNext() -> ParseTreeNode*
 			return this->ParseLoop();
 
 		default:
-			this->Error("Unexpected token");
+			this->Error("Unexpected token '"s + static_cast<char>((this->current - 1)->literal) + "' type "s + std::to_string(static_cast<i32>(current)));
 			return nullptr;
 	}
 }

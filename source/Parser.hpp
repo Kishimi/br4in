@@ -32,8 +32,8 @@ private:
 	auto ParseLoop() -> ParseTreeLoop*;
 
 private:
-	std::vector<Token> tokens;
-	std::vector<Token>::iterator current;
+	const std::vector<Token> tokens;
+	std::vector<Token>::const_iterator current;
 	bool hadError = false;
 };
 

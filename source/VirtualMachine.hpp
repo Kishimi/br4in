@@ -10,8 +10,7 @@
 #include "Parser.hpp"
 #include "Compiler.hpp"
 #include "Common.hpp"
-
-static constexpr auto BR4IN_VM_INITIAL_MEMORY_SIZE = 1 << 8;
+#include "Util.hpp"
 
 namespace Br4in
 {
@@ -27,11 +26,13 @@ public:
 
 private:
 	auto Run() -> InterpretResult;
+	
+	auto AtMemoryPointer() -> sByte&;
 
 private:
 	Chunk *chunk = nullptr;
 	std::vector<sByte> memory;
-	std::vector<sByte>::iterator memoryPointer;
+	i64 memoryPointer;
 };
 
 }
