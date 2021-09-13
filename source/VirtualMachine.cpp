@@ -35,16 +35,9 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 		return InterpretResult::ParseError;
 	}
 
-	// optimize
-	Optimizer optimizer(unit);
-	auto optimizedUnit = optimizer();
-
-	// free memory of the unoptimized unit
-	delete unit;
-
 	// compile & run
 	Compiler compiler;
-	auto chunk = compiler(optimizedUnit);
+	auto chunk = compiler(unit);
 	auto result = this->Interpret(chunk);
 
 	if (result != InterpretResult::Success)
@@ -52,8 +45,8 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 		return result;
 	}
 
-	// free memory of the optimized unit
-	delete optimizedUnit;
+	// free unit memory
+	delete unit;
 
 	return InterpretResult::Success;
 }

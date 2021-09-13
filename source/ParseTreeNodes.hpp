@@ -27,6 +27,11 @@ public:
 	auto Accept(Visitor *visitor) -> void override;
 	auto AddNode(ParseTreeNode *node) -> void;
 
+	auto erase(
+		const std::vector<ParseTreeNode*>::const_iterator &begin,
+		const std::vector<ParseTreeNode*>::const_iterator &end)
+		-> std::vector<ParseTreeNode*>::iterator;
+
 	auto begin() -> std::vector<ParseTreeNode*>::iterator;
 	auto end() -> std::vector<ParseTreeNode*>::iterator;
 

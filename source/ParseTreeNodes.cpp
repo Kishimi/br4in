@@ -28,6 +28,14 @@ auto ParseTreeUnit::AddNode(ParseTreeNode *node) -> void
 	nodes.push_back(node);
 }
 
+auto ParseTreeUnit::erase(
+	const std::vector<ParseTreeNode*>::const_iterator &begin,
+	const std::vector<ParseTreeNode*>::const_iterator &end)
+	-> std::vector<ParseTreeNode*>::iterator
+{
+	return nodes.erase(begin, end);
+}
+
 auto ParseTreeUnit::begin() -> std::vector<ParseTreeNode*>::iterator
 {
 	return nodes.begin();
