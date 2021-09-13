@@ -37,6 +37,10 @@ auto RunFile(const std::string &filename) -> void
 			case Br4in::InterpretResult::RuntimeError:
 				std::cout << "RuntimeError\n";
 				break;
+
+			default:
+				std::cout << "Unknown\n";
+				break;
 		}
 	}
 }

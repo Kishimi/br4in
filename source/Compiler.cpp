@@ -14,32 +14,32 @@ auto Compiler::operator()(ParseTreeNode *node) -> Chunk
 	return chunk;
 }
 
-auto Compiler::Visit(ParseTreeLMove *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeLMove *node) -> void
 {
 	chunk.Write(OpCode::MovePrev);
 }
 
-auto Compiler::Visit(ParseTreeRMove *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeRMove *node) -> void
 {
 	chunk.Write(OpCode::MoveNext);
 }
 
-auto Compiler::Visit(ParseTreeInc *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeInc *node) -> void
 {
 	chunk.Write(OpCode::Increment);
 }
 
-auto Compiler::Visit(ParseTreeDec *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeDec *node) -> void
 {
 	chunk.Write(OpCode::Decrement);
 }
 
-auto Compiler::Visit(ParseTreeWrite *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeWrite *node) -> void
 {
 	chunk.Write(OpCode::Write);
 }
 
-auto Compiler::Visit(ParseTreeRead *node) -> void
+auto Compiler::Visit([[maybe_unused]] ParseTreeRead *node) -> void
 {
 	chunk.Write(OpCode::Read);
 }

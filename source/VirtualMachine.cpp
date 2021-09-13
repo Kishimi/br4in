@@ -71,7 +71,7 @@ auto VirtualMachine::Run() -> InterpretResult
 
 	auto RuntimeMemoryPointerCheck = [&](auto pointer) -> bool
 	{
-		return pointer < memory.size();
+		return pointer < static_cast<i64>(memory.size());
 	};
 
 	for (auto instruction = chunk->begin(); instruction < chunk->end(); instruction++)
@@ -85,7 +85,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::MoveNext:
 				memoryPointer++;
 
-				if (memoryPointer >= memory.size())
+				if (memoryPointer >= static_cast<i64>(memory.size()))
 				{
 					memory.push_back(0);
 				}

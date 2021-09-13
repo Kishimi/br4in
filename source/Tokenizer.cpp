@@ -12,7 +12,7 @@ Tokenizer::Tokenizer(const std::string &source)
 
 auto Tokenizer::operator()() -> std::vector<Token>
 {
-	Token next = { .type = Token::None };
+	Token next = { .literal = 0, .type = Token::None };
 	std::vector<Token> tokens;
 	tokens.reserve(source.size());
 	current = source.begin();

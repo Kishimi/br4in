@@ -5,6 +5,8 @@ project "br4in"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++17"
+	warnings "Extra"
+	flags { "FatalCompileWarnings" }
 
 	targetdir "bin/%{cfg.buildcfg}"
 	objdir "obj"
