@@ -18,3 +18,15 @@ and it should work just fine.
 
 ## Windows
 I have not tested it on windows so far, but with a few tweaks it should work there too.
+
+# Planned features
+- [ ] Optimization
+	- [ ] Move (<, >) optimization
+	- [ ] Jump ([, ]) optimization
+	- [ ] Inc/Dec (+, -) optimization
+	- [ ] If possible, faster console output
+
+- [ ] Gui debugger
+	- [ ] Breakpoints
+	- [ ] Stepping
+	- [ ] Live memory view to allow easy & rapid development of brainfuck programs
