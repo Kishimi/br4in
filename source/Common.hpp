@@ -1,7 +1,5 @@
 #pragma once
 
-#include <ostream>
-
 using i8 = char;
 using i32 = int;
 using i64 = long long int;
