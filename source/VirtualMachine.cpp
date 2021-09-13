@@ -9,7 +9,7 @@ VirtualMachine::VirtualMachine()
 	memory.resize(1);
 }
 
-auto VirtualMachine::Interpret(Chunk &chunk) -> InterpretResult
+auto VirtualMachine::Interpret(const Chunk &chunk) -> InterpretResult
 {
 	this->chunk = &chunk;
 	return this->Run();
@@ -54,6 +54,16 @@ auto VirtualMachine::GetMemory() -> std::vector<Byte>
 
 auto VirtualMachine::Run() -> InterpretResult
 {
+	constexpr void* jumpTable[] = {
+		&&OP_MOVE_PTR,
+		&&OP_INCREMENT,
+		&&OP_DECREMENT,
+		&&OP_WRITE,
+		&&OP_READ,
+		&&OP_JUMP_NEXT,
+		&&OP_JUMP_PREV
+	};
+
 	if (!chunk)
 	{
 		return InterpretResult::RuntimeError;
@@ -70,86 +80,174 @@ auto VirtualMachine::Run() -> InterpretResult
 		chunk->DebugInstruction(*instruction);
 		#endif
 
-		switch (*instruction)
+		goto* jumpTable[static_cast<i32>(*instruction)];
+
+		OP_MOVE_PTR:
 		{
-			case OpCode::MovePtr:
+			const i8 moveAmount = *(++instruction);
+			memoryPointer += moveAmount;
+
+			if (memoryPointer >= memory.size())
 			{
-				const i8 moveAmount = *(++instruction);
-				memoryPointer += moveAmount;
-
-				if (memoryPointer >= memory.size())
-				{
-					memory.push_back(0);
-				}
-				break;
+				memory.push_back(0);
 			}
-
-			case OpCode::Increment:
-				this->AtMemoryPointer()++;
-				break;
-
-			case OpCode::Decrement:
-				this->AtMemoryPointer()--;
-				break;
-
-			case OpCode::Write:
-				#if not DEBUG_TRACE_EXECUTION
-				std::cout << this->AtMemoryPointer() << std::flush;
-				#else
-				std::cout << "Write: " << this->AtMemoryPointer() << "\n";
-				#endif
-
-				break;
-
-			case OpCode::Read:
-				std::cin >> this->AtMemoryPointer();
-				std::cin.ignore();
-				break;
-
-			case OpCode::JumpNext:
-				if (this->AtMemoryPointer() == 0)
-				{
-					u32 scope = 1;
-					while (*instruction != OpCode::JumpPrev || scope != 0)
-					{
-						instruction++;
-
-						if (*instruction == OpCode::JumpNext)
-						{
-							scope++;
-						}
-						else if (*instruction == OpCode::JumpPrev)
-						{
-							scope--;
-						}
-					}
-				}
-				break;
-
-			case OpCode::JumpPrev:
-				if (this->AtMemoryPointer() != 0)
-				{
-					u32 scope = 1;
-					while (*instruction != OpCode::JumpNext || scope != 0)
-					{
-						instruction--;
-
-						if (*instruction == OpCode::JumpNext)
-						{
-							scope--;
-						}
-						else if (*instruction == OpCode::JumpPrev)
-						{
-							scope++;
-						}
-					}
-				}
-				break;
-
-			default:
-				return InterpretResult::RuntimeError;
 		}
+		goto BREAK;
 
+		OP_INCREMENT:
+		{
+			this->AtMemoryPointer()++;
+		}
+		goto BREAK;
+
+		OP_DECREMENT:
+		{
+			this->AtMemoryPointer()--;
+		}
+		goto BREAK;
+
+		OP_WRITE:
+		{
+			#if not DEBUG_TRACE_EXECUTION
+			std::cout << this->AtMemoryPointer() << std::flush;
+			#else
+			std::cout << "Write: " << this->AtMemoryPointer() << "\n";
+			#endif
+		}
+		goto BREAK;
+
+		OP_READ:
+		{
+			std::cin >> this->AtMemoryPointer();
+			std::cin.ignore();
+		}
+		goto BREAK;
+
+		OP_JUMP_NEXT:
+		{
+			if (this->AtMemoryPointer() == 0)
+			{
+				u32 scope = 1;
+				while (*instruction != OpCode::JumpPrev || scope != 0)
+				{
+					instruction++;
+
+					if (*instruction == OpCode::JumpNext)
+					{
+						scope++;
+					}
+					else if (*instruction == OpCode::JumpPrev)
+					{
+						scope--;
+					}
+				}
+			}
+		}
+		goto BREAK;
+
+		OP_JUMP_PREV:
+		{
+			if (this->AtMemoryPointer() != 0)
+			{
+				u32 scope = 1;
+				while (*instruction != OpCode::JumpNext || scope != 0)
+				{
+					instruction--;
+
+					if (*instruction == OpCode::JumpNext)
+					{
+						scope--;
+					}
+					else if (*instruction == OpCode::JumpPrev)
+					{
+						scope++;
+					}
+				}
+			}
+		}
+		goto BREAK;
+
+		// switch (*instruction)
+		// {
+		// 	case OpCode::MovePtr:
+		// 	{
+		// 		const i8 moveAmount = *(++instruction);
+		// 		memoryPointer += moveAmount;
+
+		// 		if (memoryPointer >= memory.size())
+		// 		{
+		// 			memory.push_back(0);
+		// 		}
+		// 		break;
+		// 	}
+
+		// 	case OpCode::Increment:
+		// 		this->AtMemoryPointer()++;
+		// 		break;
+
+		// 	case OpCode::Decrement:
+		// 		this->AtMemoryPointer()--;
+		// 		break;
+
+		// 	case OpCode::Write:
+		// 		#if not DEBUG_TRACE_EXECUTION
+		// 		std::cout << this->AtMemoryPointer() << std::flush;
+		// 		#else
+		// 		std::cout << "Write: " << this->AtMemoryPointer() << "\n";
+		// 		#endif
+
+		// 		break;
+
+		// 	case OpCode::Read:
+		// 		std::cin >> this->AtMemoryPointer();
+		// 		std::cin.ignore();
+		// 		break;
+
+		// 	case OpCode::JumpNext:
+		// 		if (this->AtMemoryPointer() == 0)
+		// 		{
+		// 			u32 scope = 1;
+		// 			while (*instruction != OpCode::JumpPrev || scope != 0)
+		// 			{
+		// 				instruction++;
+
+		// 				if (*instruction == OpCode::JumpNext)
+		// 				{
+		// 					scope++;
+		// 				}
+		// 				else if (*instruction == OpCode::JumpPrev)
+		// 				{
+		// 					scope--;
+		// 				}
+		// 			}
+		// 		}
+		// 		break;
+
+		// 	case OpCode::JumpPrev:
+		// 		if (this->AtMemoryPointer() != 0)
+		// 		{
+		// 			u32 scope = 1;
+		// 			while (*instruction != OpCode::JumpNext || scope != 0)
+		// 			{
+		// 				instruction--;
+
+		// 				if (*instruction == OpCode::JumpNext)
+		// 				{
+		// 					scope--;
+		// 				}
+		// 				else if (*instruction == OpCode::JumpPrev)
+		// 				{
+		// 					scope++;
+		// 				}
+		// 			}
+		// 		}
+		// 		break;
+
+		// 	default:
+		// 		return InterpretResult::RuntimeError;
+		// }
+
+		BREAK:
 		if (!RuntimeMemoryPointerCheck(memoryPointer))
 		{
 			std::cout << "[Virtual Machine]: RuntimeMemoryPointerCheck failed\n";

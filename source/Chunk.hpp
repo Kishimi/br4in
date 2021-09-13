@@ -15,8 +15,8 @@ public:
 	auto Write(const Byte byte) -> void;
 	auto DebugInstruction(const Byte instruction) -> void;
 
-	auto begin() -> std::vector<Byte>::const_iterator;
-	auto end() -> std::vector<Byte>::const_iterator;
+	auto begin() const -> std::vector<Byte>::const_iterator;
+	auto end() const -> std::vector<Byte>::const_iterator;
 
 private:
 	std::vector<Byte> byteCode;

@@ -46,12 +46,12 @@ auto Chunk::DebugInstruction(const Byte instruction) -> void
 	}
 }
 
-auto Chunk::begin() -> std::vector<Byte>::const_iterator
+auto Chunk::begin() const -> std::vector<Byte>::const_iterator
 {
 	return byteCode.begin();
 }
 
-auto Chunk::end() -> std::vector<Byte>::const_iterator
+auto Chunk::end() const -> std::vector<Byte>::const_iterator
 {
 	return byteCode.end();
 }
