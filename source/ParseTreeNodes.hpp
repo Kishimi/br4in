@@ -38,25 +38,31 @@ class ParseTreeMove final : public ParseTreeNode
 {
 public:
 	ParseTreeMove() = default;
-	ParseTreeMove(const i32 moveAmount);
+	ParseTreeMove(const uByte moveAmount);
 
 public:
 	auto Accept(Visitor *visitor) -> void override;
 
 public:
-	i32 moveAmount = 0;
+	uByte moveAmount = 0;
 };
 
 class ParseTreeInc final : public ParseTreeNode
 {
 public:
 	auto Accept(Visitor *visitor) -> void override;
+
+public:
+	uByte incAmount = 1;
 };
 
 class ParseTreeDec final : public ParseTreeNode
 {
 public:
 	auto Accept(Visitor *visitor) -> void override;
+
+public:
+	uByte decAmount = 1;
 };
 
 class ParseTreeWrite final : public ParseTreeNode

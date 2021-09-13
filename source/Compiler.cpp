@@ -5,6 +5,8 @@ namespace Br4in
 
 auto Compiler::operator()(ParseTreeNode *node) -> Chunk
 {
+	BR4IN_ASSERT(node != nullptr);
+
 	// reset chunk
 	chunk = Chunk();
 
@@ -30,16 +32,18 @@ auto Compiler::Visit(ParseTreeMove *node) -> void
 	chunk.Write(node->moveAmount);
 }
 
-auto Compiler::Visit([[maybe_unused]] ParseTreeInc *node) -> void
+auto Compiler::Visit(ParseTreeInc *node) -> void
 {
 	BR4IN_ASSERT(node != nullptr);
 	chunk.Write(OpCode::Increment);
+	chunk.Write(node->incAmount);
 }
 
-auto Compiler::Visit([[maybe_unused]] ParseTreeDec *node) -> void
+auto Compiler::Visit(ParseTreeDec *node) -> void
 {
 	BR4IN_ASSERT(node != nullptr);
 	chunk.Write(OpCode::Decrement);
+	chunk.Write(node->decAmount);
 }
 
 auto Compiler::Visit([[maybe_unused]] ParseTreeWrite *node) -> void

@@ -94,13 +94,15 @@ auto VirtualMachine::Run() -> InterpretResult
 
 		OP_INCREMENT:
 		{
-			this->AtMemoryPointer()++;
+			const u32 incAmount = *(++instruction);
+			this->AtMemoryPointer() += incAmount;
 		}
 		goto BREAK;
 
 		OP_DECREMENT:
 		{
-			this->AtMemoryPointer()--;
+			const u32 decAmount = *(++instruction);
+			this->AtMemoryPointer() -= decAmount;
 		}
 		goto BREAK;
 
