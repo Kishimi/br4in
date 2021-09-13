@@ -9,6 +9,8 @@ auto Repl() -> void
 	Compiler compiler;
 	std::string input;
 
+	std::cout << "Br4in [v" << Version() << "], a brainfuck interpreter written by Kishimi/Ruarq in C++\n";
+
 	while (true)
 	{
 		std::cout << ">>> ";
