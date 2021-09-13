@@ -1,4 +1,5 @@
 # Br4in\[fuck\]
+[![C/C++ CI](https://github.com/Kishimi/br4in/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Kishimi/br4in/actions/workflows/c-cpp.yml)
 This is my shot at a brainfuck interpreter. It's overengineered on purpose.
 
 # How to compile & run
