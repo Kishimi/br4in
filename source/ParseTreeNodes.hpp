@@ -30,6 +30,9 @@ public:
 	auto begin() -> std::vector<ParseTreeNode*>::iterator;
 	auto end() -> std::vector<ParseTreeNode*>::iterator;
 
+	auto begin() const -> std::vector<ParseTreeNode*>::const_iterator;
+	auto end() const -> std::vector<ParseTreeNode*>::const_iterator;
+
 private:
 	std::vector<ParseTreeNode*> nodes;
 };

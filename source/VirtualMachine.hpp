@@ -13,6 +13,7 @@
 #include "Compiler.hpp"
 #include "Common.hpp"
 #include "Util.hpp"
+#include "Optimizer.hpp"
 
 namespace Br4in
 {

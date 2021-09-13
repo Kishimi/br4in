@@ -17,6 +17,7 @@ auto VirtualMachine::Interpret(const Chunk &chunk) -> InterpretResult
 
 auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 {
+	// lex
 	Tokenizer tokenizer(code);
 	auto tokens = tokenizer();
 
@@ -25,6 +26,7 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 		return InterpretResult::SyntaxError;
 	}
 
+	// parse
 	Parser parser(tokens);
 	auto unit = parser();
 
@@ -33,8 +35,16 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 		return InterpretResult::ParseError;
 	}
 
+	// optimize
+	Optimizer optimizer(unit);
+	auto optimizedUnit = optimizer();
+
+	// free memory of the unoptimized unit
+	delete unit;
+
+	// compile & run
 	Compiler compiler;
-	auto chunk = compiler(unit);
+	auto chunk = compiler(optimizedUnit);
 	auto result = this->Interpret(chunk);
 
 	if (result != InterpretResult::Success)
@@ -42,7 +52,8 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 		return result;
 	}
 
-	delete unit;
+	// free memory of the optimized unit
+	delete optimizedUnit;
 
 	return InterpretResult::Success;
 }
@@ -81,6 +92,10 @@ auto VirtualMachine::Run() -> InterpretResult
 		{
 			const i8 moveAmount = *(++instruction);
 			memoryPointer += moveAmount;
+
+			#if DEBUG_TRACE_EXECUTION
+			std::cout << "moveAmount: " << i32(moveAmount) << "\n";
+			#endif
 
 			if (memoryPointer >= memory.size())
 			{
@@ -173,7 +188,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			return InterpretResult::RuntimeError;
 		}
 
-		#if DEBUG_TRACE_EXECUTION
+		#if DEBUG_TRACE_MEMORY
 		std::cout << "=== memory view ===";
 		u32 i = 0;
 		const u32 memoryWidth = 16;

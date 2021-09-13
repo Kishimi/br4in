@@ -8,7 +8,7 @@ auto Chunk::Write(const Byte byte) -> void
 	byteCode.push_back(byte);
 }
 
-auto Chunk::DebugInstruction(const Byte instruction) -> void
+auto Chunk::DebugInstruction(const Byte instruction) const -> void
 {
 	switch (instruction)
 	{

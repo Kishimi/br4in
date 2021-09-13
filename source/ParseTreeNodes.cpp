@@ -38,6 +38,16 @@ auto ParseTreeUnit::end() -> std::vector<ParseTreeNode*>::iterator
 	return nodes.end();
 }
 
+auto ParseTreeUnit::begin() const -> std::vector<ParseTreeNode*>::const_iterator
+{
+	return nodes.begin();
+}
+
+auto ParseTreeUnit::end() const -> std::vector<ParseTreeNode*>::const_iterator
+{
+	return nodes.end();
+}
+
 ParseTreeMove::ParseTreeMove(const uByte moveAmount)
 	: moveAmount(moveAmount)
 {
