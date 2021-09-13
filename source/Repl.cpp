@@ -57,7 +57,7 @@ auto Repl() -> void
 		Parser parser(tokens);
 		auto parseTrees = parser();
 
-		InterpretResult result;
+		InterpretResult result = InterpretResult::UnkownError;
 
 		for (auto parseTree : parseTrees)
 		{
