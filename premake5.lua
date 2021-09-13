@@ -6,7 +6,7 @@ project "br4in"
 	language "C++"
 	cppdialect "C++17"
 	warnings "Extra"
-	flags { "FatalCompileWarnings" }
+	flags { "FatalWarnings" }
 
 	targetdir "bin/%{cfg.buildcfg}"
 	objdir "obj"
