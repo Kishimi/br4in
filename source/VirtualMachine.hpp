@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <limits>
 
 #include "Config.hpp"
 #include "InterpretResult.hpp"
@@ -19,7 +20,7 @@ namespace Br4in
 class VirtualMachine final
 {
 public:
-	VirtualMachine();
+	VirtualMachine(const u64 preallocatedMemorySize = std::numeric_limits<i16>::max());
 
 public:
 	auto Interpret(const std::string &code) -> InterpretResult;

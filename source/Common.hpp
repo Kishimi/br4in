@@ -3,6 +3,7 @@
 #include <cassert>
 
 using i8 = char;
+using i16 = short int;
 using i32 = int;
 using i64 = long long int;
 
