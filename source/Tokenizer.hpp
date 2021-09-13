@@ -21,6 +21,8 @@ public:
 	auto operator()() -> std::vector<Token>;
 	auto HadError() const -> bool;
 
+	auto ReplMode() -> void;
+
 private:
 	auto Eof() const -> bool;
 	auto Current() const -> char;
@@ -38,6 +40,7 @@ private:
 	bool hadError = false;
 
 	u32 line;
+	bool replMode = false;
 };
 
 }

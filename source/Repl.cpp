@@ -6,6 +6,7 @@ namespace Br4in
 auto Repl() -> void
 {
 	VirtualMachine virtualMachine;
+	Compiler compiler;
 	std::string input;
 
 	while (true)
@@ -47,7 +48,25 @@ auto Repl() -> void
 			continue;
 		}
 
-		auto result = virtualMachine.Interpret(input);
+		Tokenizer tokenizer(input);
+		tokenizer.ReplMode();
+		auto tokens = tokenizer();
+
+		Parser parser(tokens);
+		auto parseTrees = parser();
+
+		InterpretResult result;
+
+		for (auto parseTree : parseTrees)
+		{
+			auto chunk = compiler(parseTree);
+			result = virtualMachine.Interpret(chunk);
+
+			if (result != InterpretResult::Success)
+			{
+				break;
+			}
+		}
 
 		if (result != InterpretResult::Success)
 		{

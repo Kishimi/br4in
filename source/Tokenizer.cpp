@@ -19,7 +19,10 @@ auto Tokenizer::operator()() -> std::vector<Token>
 	hadError = false;
 	line = 1;
 
-	this->SkipComment();
+	if (!replMode)
+	{
+		this->SkipComment();
+	}
 
 	// read all tokens
 	while (next.type != Token::EndOfFile)
@@ -47,6 +50,11 @@ auto Tokenizer::operator()() -> std::vector<Token>
 auto Tokenizer::HadError() const -> bool
 {
 	return hadError;
+}
+
+auto Tokenizer::ReplMode() -> void
+{
+	replMode = true;
 }
 
 auto Tokenizer::Eof() const -> bool
@@ -78,8 +86,6 @@ auto Tokenizer::SkipComment() -> void
 	if (this->Current() == '[')
 	{
 		i32 scope = 1;
-
-		this->Consume();
 		while (!this->Eof() && (this->Current() != ']' || scope != 0))
 		{
 			const auto prev = this->Consume();
@@ -98,13 +104,13 @@ auto Tokenizer::SkipComment() -> void
 			}
 		}
 
-		// skip ']'
-		this->Consume();
-
 		if (this->Eof())
 		{
 			this->Error("Unterminated comment, expected ']' but found EOF");
 		}
+
+		// skip ']'
+		this->Consume();
 	}
 }
 
