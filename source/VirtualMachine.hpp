@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+#include "Config.hpp"
 #include "InterpretResult.hpp"
 #include "Chunk.hpp"
 #include "Tokenizer.hpp"

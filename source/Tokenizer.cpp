@@ -1,9 +1,5 @@
 #include "Tokenizer.hpp"
 
-#if defined DEBUG
-#define DEBUG_PRINT_TOKENS 1
-#endif
-
 using namespace std::string_literals;
 
 namespace Br4in

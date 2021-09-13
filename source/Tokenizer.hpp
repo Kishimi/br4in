@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 
+#include "Config.hpp"
 #include "Common.hpp"
 #include "Token.hpp"
 #include "Util.hpp"

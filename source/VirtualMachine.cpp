@@ -1,9 +1,5 @@
 #include "VirtualMachine.hpp"
 
-#if defined DEBUG
-#define DEBUG_TRACE_EXECUTION 1
-#endif
-
 namespace Br4in
 {
 
