@@ -13,8 +13,8 @@ class Compiler final : public Visitor
 public:
 	auto operator()(ParseTreeNode *node) -> Chunk;
 
-	auto Visit(ParseTreeLMove *node) -> void override;
-	auto Visit(ParseTreeRMove *node) -> void override;
+	auto Visit(ParseTreeUnit *node) -> void override;
+	auto Visit(ParseTreeMove *node) -> void override;
 	auto Visit(ParseTreeInc *node) -> void override;
 	auto Visit(ParseTreeDec *node) -> void override;
 	auto Visit(ParseTreeWrite *node) -> void override;

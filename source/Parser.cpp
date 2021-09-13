@@ -10,20 +10,20 @@ Parser::Parser(const std::vector<Token> &tokens)
 {
 }
 
-auto Parser::operator()() -> std::vector<ParseTreeNode*>
+auto Parser::operator()() -> ParseTreeUnit*
 {
-	std::vector<ParseTreeNode*> nodes;
+	auto unit = new ParseTreeUnit();
 	current = tokens.begin();
 	hadError = false;
 
 	while (auto next = this->ParseNext())
 	{
-		nodes.push_back(next);
+		unit->AddNode(next);
 	}
 
 	this->Consume(Token::EndOfFile, "Expected EOF");
 
-	return nodes;
+	return unit;
 }
 
 auto Parser::HadError() const -> bool
@@ -84,10 +84,10 @@ auto Parser::ParseNext() -> ParseTreeNode*
 	switch (current)
 	{
 		case Token::Less:
-			return new ParseTreeLMove();
+			return new ParseTreeMove(-1);
 
 		case Token::Greater:
-			return new ParseTreeRMove();
+			return new ParseTreeMove(1);
 
 		case Token::Plus:
 			return new ParseTreeInc();

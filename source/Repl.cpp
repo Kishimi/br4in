@@ -54,21 +54,26 @@ auto Repl() -> void
 		tokenizer.ReplMode();
 		auto tokens = tokenizer();
 
+		if (tokenizer.HadError())
+		{
+			continue;
+		}
+
 		Parser parser(tokens);
-		auto parseTrees = parser();
+		auto unit = parser();
+
+		if (parser.HadError())
+		{
+			continue;
+		}
 
 		InterpretResult result = InterpretResult::UnkownError;
 
-		for (auto parseTree : parseTrees)
-		{
-			auto chunk = compiler(parseTree);
-			result = virtualMachine.Interpret(chunk);
+		auto chunk = compiler(unit);
+		result = virtualMachine.Interpret(chunk);
 
-			if (result != InterpretResult::Success)
-			{
-				break;
-			}
-		}
+		delete unit;
+		unit = nullptr;
 
 		if (result != InterpretResult::Success)
 		{

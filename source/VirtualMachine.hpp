@@ -25,16 +25,16 @@ public:
 	auto Interpret(const std::string &code) -> InterpretResult;
 	auto Interpret(Chunk &chunk) -> InterpretResult;
 
-	auto GetMemory() -> std::vector<sByte>;
+	auto GetMemory() -> std::vector<Byte>;
 
 private:
 	auto Run() -> InterpretResult;
 	
-	auto AtMemoryPointer() -> sByte&;
+	auto AtMemoryPointer() -> Byte&;
 
 private:
 	Chunk *chunk = nullptr;
-	std::vector<sByte> memory;
+	std::vector<Byte> memory;
 	u64 memoryPointer;
 };
 

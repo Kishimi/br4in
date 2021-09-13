@@ -12,12 +12,8 @@ auto Chunk::DebugInstruction(const Byte instruction) -> void
 {
 	switch (instruction)
 	{
-		case OpCode::MoveNext:
-			std::cout << "MoveNext\n";
-			break;
-
-		case OpCode::MovePrev:
-			std::cout << "MovePrev\n";
+		case OpCode::MovePtr:
+			std::cout << "MovePtr\n";
 			break;
 
 		case OpCode::Increment:

@@ -10,8 +10,7 @@ namespace OpCode
 
 enum Enum : Byte
 {
-	MoveNext,
-	MovePrev,
+	MovePtr,
 	Increment,
 	Decrement,
 	Write,

@@ -26,7 +26,7 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 	}
 
 	Parser parser(tokens);
-	auto parseTrees = parser();
+	auto unit = parser();
 
 	if (parser.HadError())
 	{
@@ -34,30 +34,20 @@ auto VirtualMachine::Interpret(const std::string &code) -> InterpretResult
 	}
 
 	Compiler compiler;
-	for (auto parseTree : parseTrees)
-	{
-		auto chunk = compiler(parseTree);
-		auto result = this->Interpret(chunk);
+	auto chunk = compiler(unit);
+	auto result = this->Interpret(chunk);
 
-		if (result != InterpretResult::Success)
-		{
-			return result;
-		}
+	if (result != InterpretResult::Success)
+	{
+		return result;
 	}
 
-	// destroy the parse trees
-	for (auto parseTree : parseTrees)
-	{
-		if (parseTree)
-		{
-			delete parseTree;
-		}
-	}
+	delete unit;
 
 	return InterpretResult::Success;
 }
 
-auto VirtualMachine::GetMemory() -> std::vector<sByte>
+auto VirtualMachine::GetMemory() -> std::vector<Byte>
 {
 	return memory;
 }
@@ -82,18 +72,17 @@ auto VirtualMachine::Run() -> InterpretResult
 
 		switch (*instruction)
 		{
-			case OpCode::MoveNext:
-				memoryPointer++;
+			case OpCode::MovePtr:
+			{
+				const i8 moveAmount = *(++instruction);
+				memoryPointer += moveAmount;
 
 				if (memoryPointer >= memory.size())
 				{
 					memory.push_back(0);
 				}
 				break;
-
-			case OpCode::MovePrev:
-				memoryPointer--;
-				break;
+			}
 
 			case OpCode::Increment:
 				this->AtMemoryPointer()++;
@@ -197,7 +186,7 @@ auto VirtualMachine::Run() -> InterpretResult
 	return InterpretResult::Success;
 }
 
-auto VirtualMachine::AtMemoryPointer() -> sByte&
+auto VirtualMachine::AtMemoryPointer() -> Byte&
 {
 	return memory[memoryPointer];
 }

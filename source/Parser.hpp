@@ -17,7 +17,7 @@ public:
 	Parser(const std::vector<Token> &tokens);
 
 public:
-	auto operator()() -> std::vector<ParseTreeNode*>;
+	auto operator()() -> ParseTreeUnit*;
 	auto HadError() const -> bool;
 
 private:

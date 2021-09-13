@@ -5,33 +5,71 @@
 namespace Br4in
 {
 
-auto ParseTreeLMove::Accept(Visitor *visitor) -> void
+ParseTreeUnit::~ParseTreeUnit()
 {
+	for (auto node : nodes)
+	{
+		if (node)
+		{
+			delete node;
+		}
+	}
+}
+
+auto ParseTreeUnit::Accept(Visitor *visitor) -> void
+{
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
-auto ParseTreeRMove::Accept(Visitor *visitor) -> void
+auto ParseTreeUnit::AddNode(ParseTreeNode *node) -> void
 {
+	BR4IN_ASSERT(node != nullptr);
+	nodes.push_back(node);
+}
+
+auto ParseTreeUnit::begin() -> std::vector<ParseTreeNode*>::iterator
+{
+	return nodes.begin();
+}
+
+auto ParseTreeUnit::end() -> std::vector<ParseTreeNode*>::iterator
+{
+	return nodes.end();
+}
+
+ParseTreeMove::ParseTreeMove(const i32 moveAmount)
+	: moveAmount(moveAmount)
+{
+}
+
+auto ParseTreeMove::Accept(Visitor *visitor) -> void
+{
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
 auto ParseTreeInc::Accept(Visitor *visitor) -> void
 {
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
 auto ParseTreeDec::Accept(Visitor *visitor) -> void
 {
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
 auto ParseTreeWrite::Accept(Visitor *visitor) -> void
 {
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
 auto ParseTreeRead::Accept(Visitor *visitor) -> void
 {
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
@@ -48,11 +86,13 @@ ParseTreeLoop::~ParseTreeLoop()
 
 auto ParseTreeLoop::Accept(Visitor *visitor) -> void
 {
+	BR4IN_ASSERT(visitor != nullptr);
 	visitor->Visit(this);
 }
 
 auto ParseTreeLoop::AddNode(ParseTreeNode *node) -> void
 {
+	BR4IN_ASSERT(node != nullptr);
 	nodes.push_back(node);
 }
 
