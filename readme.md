@@ -3,7 +3,7 @@ This is my shot at a brainfuck interpreter. It's overengineered on purpose.
 
 # How to compile & run
 After compiling, you should find the executable in `projectdir/bin/release/`.
-For more information, just run `path/to/br4in -h` (TODO: add a help command line option)
+For more information, just run `path/to/br4in -h`
 
 ## Linux
 You just have to run the following in the project directory
