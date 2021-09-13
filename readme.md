@@ -1,5 +1,6 @@
 # Br4in\[fuck\]
 [![C/C++ CI](https://github.com/Kishimi/br4in/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Kishimi/br4in/actions/workflows/c-cpp.yml)
+[![CodeQL](https://github.com/Kishimi/br4in/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/Kishimi/br4in/actions/workflows/codeql-analysis.yml)
 
 This is my shot at a brainfuck interpreter. It's overengineered on purpose.
 
