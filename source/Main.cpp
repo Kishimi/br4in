@@ -2,42 +2,50 @@
 #include <iterator>
 #include <cstring>
 
-#include "VirtualMachine.hpp"
+#include "RunFile.hpp"
 #include "Repl.hpp"
+
+auto ShowHelp() -> void
+{
+	auto AddOption = [](const std::string &option, const std::string &desc)
+	{
+		std::cout << "\t" << option << "\t\t" << desc << "\n";
+	};
+
+	std::cout << "Usage: br4in [options] file...\n";
+	std::cout << "Options:\n";
+	AddOption("-h", "Display this information");
+	AddOption("-i", "Start REPL");
+}
 
 auto main(i32 argc, const char **argv) -> int
 {
-	if (argc == 1 || std::strcmp(argv[1], "-i") == 0)
+	switch (argc)
 	{
-		Br4in::Repl();
-		return 0;
+		case 1:
+			Br4in::Repl();
+			break;
+
+		case 2:
+			if (std::strcmp(argv[1], "-i") == 0)
+			{
+				Br4in::Repl();
+			}
+			else if (std::strcmp(argv[1], "-h") == 0)
+			{
+				ShowHelp();
+			}
+			else
+			{
+				Br4in::RunFile(argv[1]);
+			}
+			break;
+
+		default:
+			std::cout << "Unknown options\n";
+			ShowHelp();
+			return 1;
 	}
 
-	std::ifstream file(argv[1]);
-	std::string code(std::istreambuf_iterator<char>(file), {});
-
-	Br4in::VirtualMachine virtualMachine;
-	auto result = virtualMachine.Interpret(code);
-
-	if (result != Br4in::InterpretResult::Success)
-	{
-		std::cout << "[Virtual Machine]: InterpretResult=";
-
-		switch (result)
-		{
-			case Br4in::InterpretResult::SyntaxError:
-				std::cout << "SyntaxError\n";
-				break;
-
-			case Br4in::InterpretResult::ParseError:
-				std::cout << "ParseError\n";
-				break;
-
-			case Br4in::InterpretResult::RuntimeError:
-				std::cout << "RuntimeError\n";
-				break;
-		}
-	}
-
-	return static_cast<i32>(result);
+	return 0;
 }
