@@ -35,7 +35,7 @@ private:
 private:
 	Chunk *chunk = nullptr;
 	std::vector<sByte> memory;
-	i64 memoryPointer;
+	u64 memoryPointer;
 };
 
 }

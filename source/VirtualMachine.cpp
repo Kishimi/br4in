@@ -71,7 +71,7 @@ auto VirtualMachine::Run() -> InterpretResult
 
 	auto RuntimeMemoryPointerCheck = [&](auto pointer) -> bool
 	{
-		return pointer < static_cast<i64>(memory.size());
+		return pointer < memory.size();
 	};
 
 	for (auto instruction = chunk->begin(); instruction < chunk->end(); instruction++)
@@ -85,7 +85,7 @@ auto VirtualMachine::Run() -> InterpretResult
 			case OpCode::MoveNext:
 				memoryPointer++;
 
-				if (memoryPointer >= static_cast<i64>(memory.size()))
+				if (memoryPointer >= memory.size())
 				{
 					memory.push_back(0);
 				}
@@ -96,32 +96,14 @@ auto VirtualMachine::Run() -> InterpretResult
 				break;
 
 			case OpCode::Increment:
-				if (!RuntimeMemoryPointerCheck(memoryPointer))
-				{
-					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
-					return InterpretResult::RuntimeError;
-				}
-
 				this->AtMemoryPointer()++;
 				break;
 
 			case OpCode::Decrement:
-				if (!RuntimeMemoryPointerCheck(memoryPointer))
-				{
-					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
-					return InterpretResult::RuntimeError;
-				}
-
 				this->AtMemoryPointer()--;
 				break;
 
 			case OpCode::Write:
-				if (!RuntimeMemoryPointerCheck(memoryPointer))
-				{
-					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
-					return InterpretResult::RuntimeError;
-				}
-
 				#if not DEBUG_TRACE_EXECUTION
 				std::cout << this->AtMemoryPointer() << std::flush;
 				#else
@@ -136,12 +118,6 @@ auto VirtualMachine::Run() -> InterpretResult
 				break;
 
 			case OpCode::JumpNext:
-				if (!RuntimeMemoryPointerCheck(memoryPointer))
-				{
-					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
-					return InterpretResult::RuntimeError;
-				}
-
 				if (this->AtMemoryPointer() == 0)
 				{
 					u32 scope = 1;
@@ -162,12 +138,6 @@ auto VirtualMachine::Run() -> InterpretResult
 				break;
 
 			case OpCode::JumpPrev:
-				if (!RuntimeMemoryPointerCheck(memoryPointer))
-				{
-					std::cout << "[RuntimeMemoryPointerCheck]: failed\n";
-					return InterpretResult::RuntimeError;
-				}
-
 				if (this->AtMemoryPointer() != 0)
 				{
 					u32 scope = 1;
@@ -189,6 +159,12 @@ auto VirtualMachine::Run() -> InterpretResult
 
 			default:
 				return InterpretResult::RuntimeError;
+		}
+
+		if (!RuntimeMemoryPointerCheck(memoryPointer))
+		{
+			std::cout << "[Virtual Machine]: RuntimeMemoryPointerCheck failed\n";
+			return InterpretResult::RuntimeError;
 		}
 
 		#if DEBUG_TRACE_EXECUTION
