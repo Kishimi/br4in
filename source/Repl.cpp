@@ -78,18 +78,18 @@ auto Repl() -> void
 		if (result != InterpretResult::Success)
 		{
 			std::cout << "[Virtual Machine]: InterpretResult=";
+
+			switch (result)
+			{
+				case InterpretResult::SyntaxError: std::cout << "SyntaxError\n"; break;
+				case InterpretResult::ParseError: std::cout << "ParseError\n"; break;
+				case InterpretResult::RuntimeError: std::cout << "RuntimeError\n"; break;
+				default: std::cout << "Unknown\n"; break;
+			}
 		}
 		else
 		{
 			std::cout << "\n";
-		}
-
-		switch (result)
-		{
-			case InterpretResult::SyntaxError: std::cout << "SyntaxError\n"; break;
-			case InterpretResult::ParseError: std::cout << "ParseError\n"; break;
-			case InterpretResult::RuntimeError: std::cout << "RuntimeError\n"; break;
-			default: std::cout << "Unknown\n"; break;
 		}
 	}
 }
