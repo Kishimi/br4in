@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <limits>
+#include <cstdio>
 
 #include "Config.hpp"
 #include "InterpretResult.hpp"

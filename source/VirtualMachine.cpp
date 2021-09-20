@@ -117,7 +117,11 @@ auto VirtualMachine::Run() -> InterpretResult
 		OP_WRITE:
 		{
 			#if not DEBUG_TRACE_EXECUTION
-			std::cout << this->AtMemoryPointer() << std::flush;
+			// I was wondering about the speed of brain, when I tested the speed of std::cout.
+			// unbeknown to me, it's so slow!
+			// std::cout << this->AtMemoryPointer() << std::flush;
+			std::printf("%c", this->AtMemoryPointer());
+			std::fflush(stdout);
 			#else
 			std::cout << "Write: " << this->AtMemoryPointer() << "\n";
 			#endif
